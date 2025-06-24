@@ -4,7 +4,7 @@ export default async function handler(request, response) {
   // --- CONFIGURATION ---
   // 1. Paste the URL of your Apps Script Web App here.
   //    Get it from Deploy > Manage deployments > Select your deployment > Copy the URL.
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrRJ7q48nqBFaMzRYX0x8HWPVzdfOVIBijdihfEZlJx7HbmH-YoD0oVW7pUO7X1aMVAA/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfWLFkZu_Gl2WJzA7Jz17WzJY5ndFNP0vKJ50-U4hXI-YfF6k0MlbWQaVn03xkfZ8Ohg/exec';
 
   // 2. Paste the SECRET_KEY you created in your Code.js file.
   const SECRET_KEY = 'Talhaishere#12122234';
