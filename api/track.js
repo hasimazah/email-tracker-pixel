@@ -1,53 +1,39 @@
-// This is the code for our external tracking service.
+// This is the FINAL, most robust version of the tracking service code.
+// It reads the ID from the URL path (e.g., /api/track/some-uuid).
 
 export default async function handler(request, response) {
-  // --- CONFIGURATION ---
-  // 1. Paste the URL of your Apps Script Web App here.
-  //    Get it from Deploy > Manage deployments > Select your deployment > Copy the URL.
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfWLFkZu_Gl2WJzA7Jz17WzJY5ndFNP0vKJ50-U4hXI-YfF6k0MlbWQaVn03xkfZ8Ohg/exec';
+  // --- THIS CONFIGURATION SHOULD ALREADY BE CORRECT ---
+  const APPS_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'; // This should already be your correct URL
+  const SECRET_KEY = 'PASTE_YOUR_SECRET_KEY_HERE'; // This should already be your secret key
+  // ----------------------------------------------------
 
-  // 2. Paste the SECRET_KEY you created in your Code.js file.
-  const SECRET_KEY = 'Talhaishere#12122234';
-  // --------------------
+  // Get the full URL and extract the last part, which is our tracking ID.
+  const trackId = request.url.split('/').pop();
 
-  const { searchParams } = new URL(request.url);
-  const trackId = searchParams.get('trackId');
+  if (trackId && trackId !== 'track') { // Ensure we have an ID and it's not the word 'track'
+    const payload = {
+      secret: SECRET_KEY,
+      trackId: trackId,
+    };
 
-  if (!trackId) {
-    // If there's no trackId, just return the pixel without doing anything.
-    return respondWithPixel(response);
+    try {
+      // Make the secure call back to our Apps Script.
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+    } catch (error) {
+      console.error('Error calling Apps Script:', error);
+    }
   }
 
-  // Prepare the data to send back to our Google Sheet.
-  const payload = {
-    secret: SECRET_KEY,
-    trackId: trackId,
-  };
-
-  try {
-    // Make a secure, server-to-server POST request to our Apps Script.
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-  } catch (error) {
-    // Log the error but don't prevent the pixel from returning.
-    console.error('Error calling Apps Script:', error);
-  }
-
-  // Finally, always return the invisible pixel image.
-  return respondWithPixel(response);
-}
-
-// Helper function to create the 1x1 GIF response.
-function respondWithPixel(response) {
+  // Always return the invisible pixel image.
   const gifData = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
   const buffer = Buffer.from(gifData, 'base64');
   response.setHeader('Content-Type', 'image/gif');
   response.setHeader('Content-Length', buffer.length);
   response.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  response.send(buffer);
+  response.status(200).send(buffer);
 }
