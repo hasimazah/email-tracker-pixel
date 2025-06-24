@@ -3,8 +3,8 @@
 
 export default async function handler(request, response) {
   // --- THIS CONFIGURATION SHOULD ALREADY BE CORRECT ---
-  const APPS_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'; // This should already be your correct URL
-  const SECRET_KEY = 'PASTE_YOUR_SECRET_KEY_HERE'; // This should already be your secret key
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfWLFkZu_Gl2WJzA7Jz17WzJY5ndFNP0vKJ50-U4hXI-YfF6k0MlbWQaVn03xkfZ8Ohg/exec'; // This should already be your correct URL
+  const SECRET_KEY = 'Talhaishere#12122234'; // This should already be your secret key
   // ----------------------------------------------------
 
   // Get the full URL and extract the last part, which is our tracking ID.
